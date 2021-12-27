@@ -5,6 +5,9 @@ Projects of Andfun Yangon
 
 We can use `gsearch.py` to search for google image of any keyword and pass the file names into a csv file.
 
+# Sample Run
+![Sample Run](https://github.com/htinaunglu/AndFunYangon/blob/main/images/sample%20run.gif)
+
 # To Do
 
 We need to implement some basic machine learning algorithm to extract the image with people or person in them
