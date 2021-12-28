@@ -7,7 +7,7 @@ We can use `gsearch.py` to search for google image of any keyword and pass the f
 
 # Second Commit
 
-The face dection model has been implemented.
+The face dection model has been implemented. You may need to download the `face_cascade.xml` and put it in the same directory with the python script for it to work.
 
 # Sample Run
 ![Sample Run](https://github.com/htinaunglu/AndFunYangon/blob/main/images/sample%20run.gif)
