@@ -3,6 +3,9 @@ import requests as req
 from tqdm import tqdm
 import pandas as pd
 from bs4 import BeautifulSoup
+import cv2 
+import glob
+from shutil import copy
 
 google_image = 'https://www.google.com/search?tbm=isch&q='
 keyword = input('Enter Keyword ')
@@ -12,12 +15,14 @@ user_agent = {
 }
 
 saved_folder = './images/' + keyword
+person_save_dir = saved_folder + "/person_detect"
 
 
 def main():
     if not os.path.exists(saved_folder):
-        os.mkdir(saved_folder)
+        os.makedirs(saved_folder)
     download_images()
+    detect()
     convert_csv()
 
 def download_images():
@@ -55,11 +60,26 @@ def download_images():
             fh.write(response.content)
     print(f"Download done check the images in {(saved_folder)}")
 
+def detect():
+    face_cascade = cv2.CascadeClassifier('face_cascade.xml')
+    if not os.path.exists(person_save_dir):
+        os.mkdir(person_save_dir)
+    for i in glob.glob(saved_folder+"/*.jpg"):
+        image = cv2.imread(i)
+        g_s = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        faces = face_cascade.detectMultiScale(g_s, 1.1, 4)
+        if len(faces) != 0:
+            copy(i,person_save_dir)
+            
+
+
+
 def convert_csv():
-    the_list = os.listdir(saved_folder)
+    the_list = os.listdir(person_save_dir)
     list_df = pd.DataFrame(the_list)
-    list_df.to_csv(saved_folder+"/search_list.csv", index = None)
-    print(f"Image csv file is in {(saved_folder)}/search_list.csv")
+    list_df.columns = ["detected humans"]
+    list_df.to_csv(saved_folder+"/human_detect_list.csv", index = None)
+    print(f"Human Detected csv file is in {(saved_folder)}/human_detect_list.csv")
 
 
 if __name__ == "__main__":
